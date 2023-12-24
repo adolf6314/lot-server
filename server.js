@@ -49,7 +49,7 @@ app.get("/", async (req, res) => {
     response.forEach((item) => {
       responseArr.push(item.data());
     });
-    res.send(response);
+    res.send(responseArr);
   } catch (error) {
     res.send(error);
   }

@@ -34,7 +34,17 @@ app.post("/create", async (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
     };
-    const response = db.collection("lottery").doc(id).set(useJson);
+    const response = await db.collection("lottery").doc(id).set(useJson);
+    res.send(response);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.get("/", async (req, res) => {
+  try {
+    const lotRef = db.collection("lottery");
+    const response = await lotRef.get();
     res.send(response);
   } catch (error) {
     res.send(error);

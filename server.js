@@ -45,6 +45,10 @@ app.get("/", async (req, res) => {
   try {
     const lotRef = db.collection("lottery");
     const response = await lotRef.get();
+    let responseArr = [];
+    response.forEach((item) => {
+      responseArr.push(item.data());
+    });
     res.send(response);
   } catch (error) {
     res.send(error);

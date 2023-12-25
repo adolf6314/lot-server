@@ -25,7 +25,7 @@ admin.initializeApp({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/create", async (req, res) => {
+app.post("/iamaatomic", async (req, res) => {
   try {
     console.log(req.body);
     const page_number = req.body.page_number;
@@ -70,15 +70,29 @@ app.post("/create", async (req, res) => {
   }
 });
 
-app.get("/", async (req, res) => {
+app.put("/update-lot", async (req, res) => {
   try {
-    const lotRef = db.collection("lottery");
-    const response = await lotRef.get();
-    let responseArr = [];
-    response.forEach((item) => {
-      responseArr.push(item.data());
-    });
-    res.send(responseArr);
+    const { page_number, current_row, row_index, value } = req.body;
+    const lotRef = db.collection("lottery").doc(page_number);
+    const content = (await lotRef.get()).data()[current_row];
+    content[row_index] = value;
+    const response = await db
+      .collection("lottery")
+      .doc(page_number)
+      .update({
+        [`${current_row}`]: content,
+      });
+    res.send(response);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.get("/present-content-on-page", async (req, res) => {
+  try {
+    const lotRef = db.collection("lottery").doc(req.query.page);
+    const response = (await lotRef.get()).data();
+    res.send(response);
   } catch (error) {
     res.send(error);
   }

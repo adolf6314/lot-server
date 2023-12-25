@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 const admin = require("firebase-admin");
@@ -24,6 +25,7 @@ admin.initializeApp({
 });
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.post("/iamaatomic", async (req, res) => {
   try {

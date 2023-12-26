@@ -35,6 +35,7 @@ app.post("/iamaatomic", async (req, res) => {
       .collection("lottery")
       .doc(page_number)
       .set({
+        name: "",
         row_1: ["", "", "", "", "", "", "", ""],
         row_2: ["", "", "", "", "", "", "", ""],
         row_3: ["", "", "", "", "", "", "", ""],
@@ -72,7 +73,19 @@ app.post("/iamaatomic", async (req, res) => {
   }
 });
 
-app.put("/update-lot", async (req, res) => {
+app.put("/update-name", async (req, res) => {
+  try {
+    const { page_number, name } = req.body;
+    const response = await db.collection("lottery").doc(page_number).update({
+      name: name,
+    });
+    res.send(response);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+app.put("/update-content", async (req, res) => {
   try {
     const { page_number, current_row, row_index, value } = req.body;
     const lotRef = db.collection("lottery").doc(page_number);
